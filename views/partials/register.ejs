@@ -1,0 +1,167 @@
+<div style="width: 100%; height: 100%; position: relative;">
+    <form class="register" action="register" method="POST" id="form" autocomplete="off" autocapitalize="on">
+      <label for="fname">First name</label><br>
+      <input type="text" id="fname" name="fname"
+        type="text"
+        minlength="2"
+        pattern="[a-zA-Z]{2,32}"
+        placeholder="Will"
+        oninput="inputCheck('fname')"
+        <% if (typeof fname != 'undefined') { %>
+          value="<%= fname %>"
+        <% } %>
+        required
+        ><br>
+
+      <label for="lname">Last name</label><br>
+      <input type="text" id="lname" name="lname"
+        type="text"
+        minlength="2"
+        pattern="[a-zA-Z]{2,32}"
+        placeholder="Smith"
+        oninput="inputCheck('lname')"
+        <% if (typeof lname != 'undefined') { %>
+          value="<%= lname %>"
+        <% } %>
+        required
+        ><br>
+
+      <label for="ssn">SSN</label><br>
+      <input type="text" id="ssn" 
+        name="socialSecurityNumber" 
+        pattern="^[0-9]{10}$"
+        minlength="10" 
+        maxlength="10"
+        placeholder="9001011234"
+        oninput="inputCheck('ssn')"
+        <% if (typeof ssn != 'undefined') { %>
+        value="<%= ssn %>"
+        <% } %>
+        required
+        ><br>
+
+      <label for="phone">Phone number</label><br>
+      <input type="text" id="phone" name="phoneNumber" 
+        type="number"
+        pattern="^[0-9]{10}$"
+        minlength="10" 
+        maxlength="10"
+        placeholder="0707070707"
+        oninput="inputCheck('phone')"
+        <% if (typeof phone != 'undefined') { %>
+          value="<%= phone %>"
+        <% } %>
+        required
+        ><br>
+
+      <label for="email">Email</label><br>
+        <input type="text" id="email" name="email"
+        type="email"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+        placeholder="willsmith@example.com"
+        oninput="inputCheck('email')"
+        <% if (typeof email != 'undefined') { %>
+          value="<%= email %>"
+        <% } %>
+        required
+        ><br>
+    </form>
+
+    <button class="button" onclick="submitCheck()">Register</button>
+
+    <button style="position: absolute; bottom: 0%; background-color: red; width: 100px; height: 100px;" onclick="location.href='/'"></button>
+</div>
+<script>
+  <% if (typeof ssn != 'undefined') { %>
+    window.onload = function () {
+      var ssnelem = document.getElementById("ssn");
+      ssnelem.setCustomValidity('SSN already registered, please log in or create a new account with a different SSN');
+      ssnelem.reportValidity();
+    }
+  <% } %>
+  async function ssnTaken () {
+    var ssnelem = document.getElementById("ssn");
+    ssnelem.setCustomValidity('SSN already registered, please log in or create a new account with a different SSN');
+    ssnelem.reportValidity();
+  }
+  async function submitCheck() {
+    var fname = document.getElementById("fname");
+    var lname = document.getElementById("lname");
+    var ssn = document.getElementById("ssn");
+    var phone = document.getElementById("phone");
+    var email = document.getElementById("email");
+    var regform = document.getElementById("form");
+
+    var regValid = regform.checkValidity();
+
+    if (regValid) {
+      //fname.value = "pepegavalid"
+      regform.submit();
+    }
+    else {
+      //fname.value = "pepegainvalid"
+      regform.reportValidity();
+    }
+    /*
+    if (fname.value.length < 2) {
+      fname.value = "penis";
+      fname.setCustomValidity('Please enter a name');
+    }
+    else {
+      fname.setCustomValidity('');
+    }
+    if (lname.value.length < 2) {
+      lname.setCustomValidity('Please enter a last name');
+    }
+    else {
+      lname.setCustomValidity('');
+    }
+    if (ssn.value.length < 10) {
+      ssn.setCustomValidity('Please enter a valid SSN (10 numbers)');
+    }
+    else {
+      ssn.setCustomValidity('');
+    }
+    if (phone.value.length < 10) {
+      phone.setCustomValidity('Please enter a valid phone number (10 numbers)');
+    }
+    else {
+      phone.setCustomValidity('');
+    }
+    if (email.value.length < 1) {
+      email.setCustomValidity('Please enter an email address');
+    }
+    else {
+      email.setCustomValidity('');
+    }
+    */
+    /*
+    if (regform.checkValidity()) {
+      regform.submit();
+    }
+    */
+  }
+  async function inputCheck(eleID) {
+    var elem = document.getElementById(eleID);
+    switch(eleID) {
+      case 'fname':
+        elem.reportValidity();
+        break;
+      case 'lname':
+        elem.reportValidity();
+        break;
+      case 'ssn':
+        elem.setCustomValidity('');
+        elem.reportValidity();
+        break;
+      case 'phone':
+        elem.reportValidity();
+        break;
+      case 'email':
+        elem.reportValidity();
+        break;
+      default: 
+        break;
+    }
+  }
+</script>

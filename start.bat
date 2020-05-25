@@ -1,0 +1,1 @@
+set DEBUG=fitnessab2:* & npm start
