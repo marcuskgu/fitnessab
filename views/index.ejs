@@ -6,7 +6,16 @@
   </head>
   <body>
     <div style="height: 1200px; width: 675px; margin: auto; background-color: #333366; position: absolute; top: 10%; left: 37%;">
-      <%- include(page) %>
+      <div style="height: 88.75%; width: 100%;">
+        <%- include(page) %>
+      </div>
+      <div class="menu">
+        <button class="profile" onclick="location.href='/profile'"></button>
+        <button class="stats" onclick="location.href='/stats'"></button>
+        <button class="classes" onclick="location.href='/classes'"></button>
+        <button class="bookings" onclick="location.href='/bookings'"></button>
+        <button class="settings"></button>
+      </div>
     </div>
   </body>
 </html>
