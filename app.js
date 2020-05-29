@@ -16,6 +16,7 @@ var profileRouter = require('./routes/profile');
 var statsRouter = require('./routes/stats');
 var bookingsRouter = require('./routes/bookings');
 var classesRouter = require('./routes/classes');
+var orderRouter = require('./routes/order');
 
 var db = require('./database/db.js');
 
@@ -40,6 +41,7 @@ app.use('/profile', profileRouter);
 app.use('/stats', statsRouter);
 app.use('/bookings', bookingsRouter);
 app.use('/classes', classesRouter);
+app.use('/order', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

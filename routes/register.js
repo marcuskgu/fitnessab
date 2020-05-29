@@ -9,7 +9,7 @@ var db = new sqlite3.Database('./database/fitnessab.db');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { page: 'partials/register' });
+  res.render('index', { page: 'partials/register', nomenu: true });
 });
 
 router.post('/', db.registerUser, function(req, res, next) {
@@ -18,7 +18,8 @@ router.post('/', db.registerUser, function(req, res, next) {
       console.log('loading success page');
     res.render('index', 
     { page: 'partials/success', 
-      ssn: req.body.socialSecurityNumber});
+      ssn: req.body.socialSecurityNumber,
+      nomenu: true});
 
   
   /*
@@ -48,7 +49,8 @@ router.post('/', db.registerUser, function(req, res, next) {
     lname: req.body.lname,
     phone: req.body.phoneNumber,
     ssn: req.body.socialSecurityNumber,
-    email: req.body.email
+    email: req.body.email,
+    nomenu: true
   });
 });
  /*
