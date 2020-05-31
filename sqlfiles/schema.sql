@@ -36,7 +36,7 @@ CREATE TABLE Membership (
   tier TEXT NOT NULL,
   regDate DATE NOT NULL,
   durationDays INTEGER NOT NULL,
-  homeGym INTEGER NOT NULL,
+  homeGym TEXT NOT NULL,
   PRIMARY KEY (memberSSN, regDate),
   FOREIGN KEY (memberSSN) REFERENCES Member(socialSecurityNumber),
   FOREIGN KEY (tier) REFERENCES MembershipTier(tier),

@@ -7,10 +7,8 @@ router.get('/', function(req, res, next) {
   });
 
 router.post('/', db.login, function(req, res, next) {
-    //app.locals.userid = req.body.socialSecurityNumber
-    res.render('index',
-     { page: 'partials/profile',
-       name: res.locals.userdata.name });
+    req.app.locals.userid = req.body.socialSecurityNumber
+    res.redirect('/profile');
   }, function(err, req, res, next) {
     res.render('index', 
      { page: 'partials/login',

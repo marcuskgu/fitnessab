@@ -1,7 +1,61 @@
 <div class="frame">
-    <h1 class="pgheader">Profile</h1>
-    <div>
-        <div style="display: inline;">bajs</div>
-        <div style="display: inline;">kiss</div>
+    <div class="row header">
+        <h1 class="pgheader">Profile</h1>
+    </div>
+    <div id="tierrow" class="row" style="flex-direction: column;">
+        <div class="row alignbottom">
+
+        </div>
+        <h1>Current tier</h1>
+        <div class="row">
+            <div class="cell textbox" style="width: 30%;">
+                <h1><%= profile.tier %></h1>
+            </div>
+            <div class="cell alignright">
+                <button class="button second" onclick="location.href='/order'"><h1>Update membership ></h1></button>
+            </div>
+        </div>
+    </div>
+    <div id="durationrow" class="row column">
+        <div class="row alignbottom">
+        </div>
+        <div class="row column">
+            <h1>Member since:</h1>
+            <div class="cell textbox">
+                <h1><%= profile.regDate %></h1>
+            </div>
+        </div>
+    </div>
+    <div id="expirationrow" class="row column">
+        <div class="row alignbottom">
+        </div>
+        <div class="row column">
+            <h1>Membership expires:</h1>
+            <div class="cell textbox">
+                <h1><%= profile.expDate %></h1>
+            </div>
+        </div>
+    </div>
+    <div id="lastvisitrow" class="row column">
+        <div class="row alignbottom">
+
+        </div>
+        <h1>Last visit:</h1>
+        <div class="row">
+            <div class="cell textbox">
+                <h1>Yesterday</h1>
+            </div>
+        </div>
+    </div>
+    <div id="maingymrow" class="row column">
+        <div class="row alignbottom">
+
+        </div>
+        <h1>Main gym:</h1>
+        <div class="row">
+            <div class="cell textbox">
+                <h1><%= profile.homeGym %></h1>
+            </div>
+        </div>
     </div>
 </div>

@@ -17,6 +17,9 @@ h1 {
 div {
   box-sizing: border-box;
 }
+p {
+  color: white;
+}
 
 /* Custom classes */
 
@@ -155,8 +158,104 @@ button.settings {
   background-position-y: center;
 }
 
+button.schedule {
+  height: 80px;
+  width: 80px;
+  position: relative;
+  right: 0px;
+  background-color: inherit;
+  border-width: 3px;
+  border-radius: 40px;
+  border-color: gray;
+  color: gray;
+}
+
+button.schedule:hover {
+  border-color: greenyellow;
+  color: greenyellow;
+}
+
+button.schedule-booked {
+  height: 80px;
+  width: 80px;
+  position: relative;
+  right: 0px;
+  background-color: inherit;
+  border-width: 3px;
+  border-radius: 40px;
+  border-color: greenyellow;
+  color: greenyellow;
+}
+
+button.schedule-booked:hover {
+  border-color: darkred;
+  color: darkred;
+}
+
+button.popupConfirm {
+  height: 80px;
+  width: 150px;
+  position: relative;
+  right: 0px;
+  background-color: inherit;
+  border-width: 3px;
+  border-radius: 40px;
+  border-color: greenyellow;
+  color: greenyellow;
+}
+
+button.popupConfirm:hover {
+  border-color: green;
+  color: green;
+}
+
+button.popupCancel {
+  height: 80px;
+  width: 150px;
+  position: relative;
+  right: 0px;
+  background-color: inherit;
+  border-width: 3px;
+  border-radius: 40px;
+  border-color: darkred;
+  color: darkred;
+}
+
+button.popupCancel:hover {
+  border-color: red;
+  color: red;
+}
+
 h1.pgheader {
   font-size: 42px;
+}
+
+div.popupBox {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: none;
+}
+
+div.popupBackground {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 50%;
+  background-color: black;
+}
+
+div.popupFrame {
+  padding: 5%;
+  box-shadow: 0px 10px 10px black;
+  background-color: #24195D;
+  border-radius: 40px;
+  width: 500px;
+  height: 600px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 div.textbox {
@@ -174,7 +273,7 @@ select.textbox {
   border-width: 0;
   border-radius: 15px;
   background-color: #24195D;
-  height: 100%;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,6 +330,9 @@ div.cell {
 .whitespace {
   /* empty element used for padding, layout etc */
 }
+.defaultbackground {
+ background-color: #333366;
+}
 .alignright {
   justify-content: right;
 }
@@ -250,4 +352,16 @@ height: 95%;
 .center {
 justify-content: center;
 align-items: center;
+}
+.centertext {
+  text-align: center;
+}
+.hidden {
+  display: none;
+}
+.scroll {
+  overflow: auto;
+}
+.largetext {
+  font-size: larger;
 }

@@ -5,7 +5,7 @@ var db = require('../database/db.js');
 router.get('/', function(req, res, next) {
     res.render('index', 
         { page: 'partials/bookings',
-          userid: app.locals.userid });
+          userid: req.app.locals.userid });
 });
 
 module.exports = router;

@@ -1,3 +1,190 @@
 <div class="frame">
-    <h1>order</h1>
+  <div class="row header">
+    <h1 class="header">Payment Plan</h1>
+  </div>
+  <div id="tierrow" class="row" style="flex-direction: column;">
+    <div class="row alignbottom">
+      <!-- padding -->
+    </div>
+    <h1>Select Tier:</h1>
+    <div class="row">
+      <div class="cell third center">
+        <button class="button second spacing" onclick="toggleBenefits('Bronze')" style="background-color:chocolate;">
+          <h1>Bronze</h1>
+        </button>
+      </div>
+      <div class="cell third center">
+        <button class="button second spacing" onclick="toggleBenefits('Silver')" style="background-color: silver;">
+          <h1>Silver</h1>
+        </button>
+      </div>
+      <div class="cell third center">
+        <button class="button second spacing" onclick="toggleBenefits('Gold')" style="background-color: goldenrod;">
+          <h1>Gold</h1>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="durationrow" class="row column">
+    <div class="row column" id="bronzeinfo" style="display: none;">
+      <div class="row alignbottom">
+      </div>
+      <h1>Bronze benefits:</h1>
+      <div class="row column">
+        <ul class="benefits">
+          <% 
+            benefits.forEach(function(benefit) {
+              if (benefit.tier == 'Bronze') {
+          %>
+              <li>
+                <h1><%= benefit.accessTo %></h1>
+              </li>
+          <%
+              }
+            }); 
+          %>
+        </ul>
+      </div>
+    </div>
+    <div class="row column" id="silverinfo" style="display: none;">
+      <div class="row alignbottom">
+      </div>
+      <h1>Silver benefits:</h1>
+      <div class="row column">
+        <ul class="benefits">
+          <% 
+            benefits.forEach(function(benefit) {
+              if (benefit.tier == 'Bronze' || benefit.tier == 'Silver') {
+          %>
+              <li>
+                <h1><%= benefit.accessTo %></h1>
+              </li>
+          <%
+              }
+            }); 
+          %>
+        </ul>
+      </div>
+    </div>
+    <div class="row column" id="goldinfo" style="display: none;">
+      <div class="row alignbottom">
+      </div>
+      <h1>Gold benefits:</h1>
+      <div class="row column">
+        <ul class="benefits">
+          <% 
+            benefits.forEach(function(benefit) {
+          %>
+            <li>
+              <h1><%= benefit.accessTo %></h1>
+            </li>
+          <%
+            }); 
+          %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="pricerow" class="row column">
+    <h1>Price:</h1>
+    <h1 id="price"></h1>
+  </div>
+  <div id="maingymrow" class="row column">
+    <h1>Select main gym:</h1>
+    <div class="row">
+      <select class="textbox full" name="homegym" id="homegym">
+        <% 
+        facilities.forEach(function(facility) { 
+        %>
+        <option value="<%=facility.name%>"><%=facility.name%></option>
+        <%
+        });
+        %>
+      </select>
+    </div>
+  </div>
+  <div id="planrow" class="row column">
+    <h1>Select plan:</h1>
+    <div class="row">
+      <select class="textbox full" name="plan" id="plan" onchange="updatePrice(this.value)">
+        <% 
+        durations.forEach(function(duration) { 
+        %>
+        <option value="<%=duration.duration%>"><%=duration.duration%> days</option>
+        <%
+        });
+        %>
+      </select>
+    </div>
+  </div>
+  <div class="row column cell center">
+    <div class="cell whitespace"></div>
+    <div class="cell center">
+      <button class="button big" onclick="location.href='/profile'">Cancel</button>
+    </div>
+    <div class="cell whitespace"></div>
+    <div class="cell center">
+      <button class="button big" onclick="submitOrder()">Proceed</button>
+    </div>
+  </div>
+  <div class="hidden">
+    <form id="fakeform" action="order" method="POST">
+      <input type="text" name="faketier" id="faketier" />
+      <input type="text" name="fakeduration" id="fakeduration" />
+      <input type="text" name="fakegym" id="fakegym" />
+    </form>
+  </div>
 </div>
+<script>
+  var activeTier = "";
+  async function toggleBenefits(tier) {
+    activeTier = tier;
+    var bronze = document.getElementById("bronzeinfo");
+    var silver = document.getElementById("silverinfo");
+    var gold = document.getElementById("goldinfo");
+    var price = document.getElementById("price");
+    switch (tier) {
+      case "Gold":
+        bronze.style.display = "none";
+        silver.style.display = "none";
+        gold.style.display = "flex";
+        //price.innerHTML = "350 SEK / Month"
+        break;
+      case "Silver":
+        bronze.style.display = "none";
+        silver.style.display = "flex";
+        gold.style.display = "none";
+        //price.innerHTML = "250 SEK / Month"
+        break;
+      case "Bronze":
+        bronze.style.display = "flex";
+        silver.style.display = "none";
+        gold.style.display = "none";
+        //price.innerHTML = "150 SEK / Month"
+        break;
+    }
+    var dura = document.getElementById("plan").value;
+    updatePrice(dura);
+  }
+  async function updatePrice(plan) {
+    var price = document.getElementById("price");
+    var pricelist = <%- JSON.stringify(prices) %>;
+    //var testprice = pricelist.find(pricePop).costMonthSEK;
+    var tierprice = pricelist.find(function(arr) {
+      return arr.tier === activeTier;
+    }).costMonthSEK;
+    var totalprice = parseInt((tierprice * plan) / 30);
+    price.innerHTML = totalprice + " SEK Total (" + tierprice + "/Mo)"
+  }
+  async function submitOrder() {
+    var tier = activeTier;
+    var duration = document.getElementById("plan").value;
+    var homeGym = document.getElementById("homegym").value;
+
+    document.getElementById("faketier").value = tier;
+    document.getElementById("fakeduration").value = duration;
+    document.getElementById("fakegym").value = homeGym;
+
+    document.getElementById("fakeform").submit();
+  }
+</script>

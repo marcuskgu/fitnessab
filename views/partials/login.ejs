@@ -4,8 +4,8 @@
             <h1 style="font-size: 36px; color: red;">Wrong password or SSN!</h1><h1>Please try again</h1>
         </div>
     <% } %>
-    <div style="width: 100%; height: 50%; position: relative; top: 30%;">
-    <form class="register" action="login" method="POST" autocomplete="off">
+    <div class="row column center">
+    <form class="register" id="loginform" action="login" method="POST" autocomplete="off">
         <label for="SSN">SSN</label><br>
         <input type="text" id="ssn" 
         name="socialSecurityNumber" 
@@ -13,17 +13,17 @@
         minlength="10" 
         maxlength="10"
         oninput="inputCheck('ssn')"
+        value="1111111111"
         <% if (typeof ssn != 'undefined') { %>
         value="<%= ssn %>"
         <% } %>
         required
         ><br>
         <label for="password">Password</label><br>
-        <input type="password" id="password" name="password" required><br>
-        <button class="button" type="submit">Log in</button>
+        <input type="password" id="password" name="password" value="password" required><br>
       </form>
+      <button class="button big" form="loginform" type="submit">Log in</button>
     </div>
-    <button style="position: absolute; bottom: 0%; background-color: red; width: 100px; height: 100px;" onclick="location.href='/'"></button>
 </div>
 <script>
     <% if (typeof ssn != 'undefined') { %>

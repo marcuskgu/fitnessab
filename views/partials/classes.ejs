@@ -1,3 +1,82 @@
 <div class="frame">
-    <h1>classes</h1>
+    <div class="row header">
+        <h1 class="header">Classes</h1>
+      </div>
+    <div class="row whitespace"></div>
+    <div class="row column">
+        <h1>Category:</h1>
+        <select class="textbox full" name="classes" id="classes" onchange="updateSublist(this.value)">
+            <% 
+            classes.forEach(function(class1) { 
+            %>
+            <option value="<%=class1.type%>"><%=class1.type%></option>
+            <%
+            });
+            %>
+        </select>
+    </div>
+    <div class="row column">
+        <h1>Class:</h1>
+        <div class="cell subbox">
+            <select class="textbox full" name="empty" id="empty" onclick="updateSublist()">
+                <option value="-">-</option>
+            </select>
+        </div>
+    <% 
+    classes.forEach(function(class1) {
+    %>
+        <div class="cell column subbox" id="<%=class1.type%>-box" style="display: none;">
+            <select class="textbox full" name="<%=class1.type%>" id="<%=class1.type%>">
+            <%
+            subclasses.forEach(function(subclass) {
+                if (subclass.type == class1.type) {
+                %>
+                    <option value="<%=subclass.name%>"><%=subclass.name%></option>
+                <%
+                }
+            });
+            %>
+            </select>
+        </div>
+    <%
+    });
+    %>
+    </div>
+    <div class="row center">
+        <button class="button big" onclick="requestClasses()"><b>Display selected ></b></button>
+    </div>
+    <div class="row whitespace"></div>
+    <div class="">
+    <form id="fakeform" action="classes" method="POST">
+        <input type="text" name="faketype" id="faketype">
+        <input type="text" name="fakename" id="fakename">
+    </form>
+    </div>
 </div>
+<script>
+    window.onload = function () {
+        var type = document.getElementById('classes').value;
+        updateSublist(type);
+    }
+    async function updateSublist(type) {
+        if (!type) {
+            type = document.getElementById('classes').value;
+        }
+        var allbox = document.getElementsByClassName('subbox');
+        var box = document.getElementById(type + '-box');
+        for (i = 0; i < allbox.length; i++) {
+            allbox[i].style.display = 'none';
+        }
+        box.style.display = 'flex';
+    }
+
+    async function requestClasses() {
+        var classType = document.getElementById('classes').value;
+        var className = document.getElementById(classType).value;
+
+        document.getElementById('faketype').value = classType;
+        document.getElementById('fakename').value = className;
+
+        document.getElementById('fakeform').submit();
+    }
+</script>
