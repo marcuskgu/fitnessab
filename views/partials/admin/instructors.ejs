@@ -1,0 +1,121 @@
+<div class="frame">
+    <div class="row">
+        <div class="row topcenter padding" style="max-width: 30%;">
+            <button class="standard" onclick="openPopup('add', null)">Add instructor +</button>
+        </div>
+        <div class="row" style="width: 70%;">
+            <table border="1">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>SSN</th>
+                    <th>Edit/Delete</th>
+                </tr>
+                <%
+        if (instructors.length > 0) {
+            var i = 0;
+            instructors.forEach(function (entry) { 
+        %>
+                <tr id="entry_<%=i%>">
+                    <th id="name_<%=i%>"><%=entry.instructorName%></th>
+                    <th id="email_<%=i%>"><%=entry.email%></th>
+                    <th id="phone_<%=i%>">0<%=entry.phoneNumber%></th>
+                    <th id="ssn_<%=i%>"><%=entry.socialSecurityNumber%></th>
+                    <th id="edit_<%=i%>">
+                        <button id="<%=i%>" onclick="openPopup('edit', this.id)">E</button>
+                        <button id="<%=i%>" onclick="openPopup('delete', this.id)">D</button>
+                    </th>
+                </tr>
+                <%
+            i++;
+            });
+        }
+        %>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="popup" class="popup hidden">
+        <div class="row column center">
+            <h1 id="popupHeader">Content</h1>
+            <div class="">
+                <form class="instructor" id="fform" action="" method="POST">
+                    <label for="socialSecurityNumber">SSN</label><br>
+                    <input type="text" name="socialSecurityNumber" id="socialSecurityNumber"
+                    pattern="^[0-9]{10}$"
+                    minlength="10" 
+                    maxlength="10"><br>
+                    <label for="instructorName">Name</label><br>
+                    <input type="text" name="instructorName" id="instructorName"><br>
+                    <label for="email">Email</label><br>
+                    <input type="text" name="email" id="email"><br>
+                    <label for="phoneNumber">Phone</label><br>
+                    <input type="text" name="phoneNumber" id="phoneNumber"><br>
+                    <input type="text" name="action" id="action" class="hidden">
+                </form>
+            </div>
+            <button class="standard" onclick="submitForm()">Submit</button>
+        </div>
+        <button class="closePopup" onclick="closePopup()">X</button>
+    </div>
+</div>
+<script>
+    async function closePopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    }
+    async function openPopup(action, idno) {
+        var popup = document.getElementById('popup');
+
+        var fname = document.getElementById('instructorName');
+        var femail = document.getElementById('email');
+        var fphone = document.getElementById('phoneNumber');
+        var fssn = document.getElementById('socialSecurityNumber');
+        var faction = document.getElementById('action');
+
+        var ph = document.getElementById('popupHeader');
+
+        ph.innerHTML = action + ' instructor'
+
+        faction.value = action;
+
+        if (action != 'delete') {
+            popup.style.display = 'flex';
+        }
+        if (action == 'edit' || action == 'delete') {
+            fssn.disabled = true;
+            var name = document.getElementById('name_' + idno).innerHTML;
+            var email = document.getElementById('email_' + idno).innerHTML;
+            var phone = document.getElementById('phone_' + idno).innerHTML;
+            var ssn = document.getElementById('ssn_' + idno).innerHTML;
+
+            fname.value = name;
+            femail.value = email;
+            fphone.value = phone;
+            fssn.value = ssn;
+        } else if (action == 'add') {
+            fssn.disabled = false;
+
+            fname.value = "";
+            femail.value = "";
+            fphone.value = "";
+            fssn.value = "";
+        }
+    }
+    async function submitForm() {
+        var fssn = document.getElementById('socialSecurityNumber');
+        var faction = document.getElementById('action');
+        var fform = document.getElementById('fform');
+        fform.action = '/admin/instructors/' + faction.value;
+        fssn.disabled = false;
+        var validateForm = fform.checkValidity();
+        if (validateForm) {
+            fform.submit();
+        } else {
+
+        }
+
+    }
+</script>

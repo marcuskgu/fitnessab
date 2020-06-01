@@ -18,6 +18,12 @@ var bookingsRouter = require('./routes/bookings');
 var classesRouter = require('./routes/classes');
 var orderRouter = require('./routes/order');
 
+var adminRouter = require('./routes/admin');
+var adminClassesRouter = require('./routes/admin/classes');
+var adminInstructorsRouter = require('./routes/admin/instructors');
+var adminScheduleRouter = require('./routes/admin/schedule');
+
+
 var db = require('./database/db.js');
 
 var app = express();
@@ -42,6 +48,12 @@ app.use('/stats', statsRouter);
 app.use('/bookings', bookingsRouter);
 app.use('/classes', classesRouter);
 app.use('/order', orderRouter);
+
+app.use('/admin', adminRouter);
+app.use('/admin/classes', adminClassesRouter);
+app.use('/admin/instructors', adminInstructorsRouter);
+app.use('/admin/schedule', adminScheduleRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

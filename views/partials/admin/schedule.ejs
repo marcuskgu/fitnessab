@@ -1,0 +1,77 @@
+<div class="frame column">
+    <div class="row">
+        <div class="row spacing"></div>
+        <div class="row column">
+            <div class="row column cell">
+                <h1>Category:</h1>
+                <select class="standard" name="classes" id="classes" onchange="updateSublist(this.value)">
+                    <% 
+                    classes.forEach(function(class1) { 
+                    %>
+                    <option value="<%=class1.type%>"><%=class1.type%></option>
+                    <%
+                    });
+                    %>
+                </select>
+            </div>
+            <div class="row column cell">
+                <h1>Class:</h1>
+                <% 
+                classes.forEach(function(class1) {
+                %>
+                <div class="cell column subbox" id="<%=class1.type%>-box" style="display: none;">
+                    <select class="standard" name="<%=class1.type%>" id="<%=class1.type%>">
+                        <%
+                        subclasses.forEach(function(subclass) {
+                            if (subclass.type == class1.type) {
+                        %>
+                        <option value="<%=subclass.name%>"><%=subclass.name%></option>
+                        <%
+                            }
+                        });
+                        %>
+                    </select>
+                </div>
+                <%
+                });
+                %>
+            </div>
+            <div class="row cell"></div>
+            <div class="row center cell" style="margin-top: 30px;">
+                <button class="standard" onclick="requestClasses()"><b>Display selected ></b></button>
+            </div>
+        </div>
+        <div class="row spacing"></div>
+    </div>
+    <form class="hidden" id="form" action="" method="POST">
+        <input type="text" name="type" id="type">
+        <input type="text" name="className" id="className">
+    </form>
+</div>
+<script>
+    window.onload = function () { //doesnt work, window.onload already happens in adminindex
+        var type = document.getElementById('classes').value;
+        updateSublist(type);
+    }
+    async function updateSublist(type) {
+        if (!type) {
+            type = document.getElementById('classes').value;
+        }
+        var allbox = document.getElementsByClassName('subbox');
+        var box = document.getElementById(type + '-box');
+        for (i = 0; i < allbox.length; i++) {
+            allbox[i].style.display = 'none';
+        }
+        box.style.display = 'flex';
+    }
+
+    async function requestClasses() {
+        var classType = document.getElementById('classes').value;
+        var className = document.getElementById(classType).value;
+
+        document.getElementById('type').value = classType;
+        document.getElementById('className').value = className;
+
+        document.getElementById('form').submit();
+    }
+</script>

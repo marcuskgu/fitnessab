@@ -15,13 +15,9 @@ router.get('/', db.benefits, db.prices, db.facilities, db.durations, function(re
 });
 
 router.post('/', db.regorder, function(req, res, next) {
-  res.render('index', 
-  { page: 'partials/profile',
-    userid: req.app.locals.userid
-  });
+  res.redirect('/profile');
 }, function(err, req, res, next) {
-  res.render('index', 
-  { page: 'partials/profile'});
+  res.redirect('/profile');
 });
 
 module.exports = router;

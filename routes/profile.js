@@ -11,7 +11,7 @@ router.get('/', db.checkMembership, function(req, res, next) {
       profile: res.locals.profile });
 }, function(err, req, res, next) {
     console.log('Something went wrong in profile.js...');
-    res.render('index', { page: 'partials/profile'});
+    res.render('index', { page: 'partials/notmember'});
 });
 
 module.exports = router;

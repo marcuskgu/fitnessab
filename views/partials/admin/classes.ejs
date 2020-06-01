@@ -1,0 +1,92 @@
+<div class="frame">
+    <div class="row">
+        <div class="row topcenter padding" style="max-width: 30%;">
+            <button class="standard" onclick="openPopup('add', null)">Add class +</button>
+        </div>
+        <div class="row" style="width: 70%;">
+            <table border="1">
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Capacity</th>
+                    <th>Edit/Delete</th>
+                </tr>
+                <%
+        if (classes.length > 0) {
+            var i = 0;
+            classes.forEach(function (entry) { 
+        %>
+                <tr id="entry_<%=i%>">
+                    <th id="type_<%=i%>"><%=entry.type%></th>
+                    <th id="name_<%=i%>"><%=entry.name%></th>
+                    <th id="capacity_<%=i%>"><%=entry.capacity%></th>
+                    <th id="edit_<%=i%>">
+                        <button id="<%=i%>" onclick="">E</button>
+                        <button id="<%=i%>" onclick="">D</button>
+                    </th>
+                </tr>
+                <%
+            i++;
+            });
+        }
+        %>
+            </table>
+        </div>
+    </div>
+    <div id="popup" class="popup hidden">
+        <div class="row column center">
+            <h1 id="popupHeader">Content</h1>
+            <div class="">
+                <form class="instructor" id="fform" action="" method="POST">
+                    <label for="type">Class type:</label><br>
+                    <input type="text" name="type" id="type"><br>
+                    <label for="name">Class name:</label><br>
+                    <input type="text" name="name" id="name"><br>
+                    <input type="text" name="action" id="action" class="hidden">
+                </form>
+            </div>
+            <button class="standard" onclick="submitForm()">Submit</button>
+        </div>
+        <button class="closePopup" onclick="closePopup()">X</button>
+    </div>
+</div>
+<script>
+    async function closePopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    }
+    async function openPopup(action, idno) {
+        var popup = document.getElementById('popup');
+
+        var ftype = document.getElementById('type');
+        var fname = document.getElementById('name');
+        var faction = document.getElementById('action');
+
+        var ph = document.getElementById('popupHeader');
+
+        ph.innerHTML = action + ' class'
+
+        faction.value = action;
+
+        if (action != 'delete') {
+            popup.style.display = 'flex';
+        }
+        if (action == 'edit' || action == 'delete') {
+
+        } else if (action == 'add') {
+
+        }
+    }
+    async function submitForm() {
+        var faction = document.getElementById('action');
+        var fform = document.getElementById('fform');
+        fform.action = '/admin/classes/' + faction.value;
+        var validateForm = fform.checkValidity();
+        if (validateForm) {
+            fform.submit();
+        } else {
+
+        }
+
+    }
+</script>

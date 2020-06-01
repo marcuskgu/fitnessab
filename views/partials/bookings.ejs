@@ -1,6 +1,153 @@
-<div class="frame">
-    <h1>displayclasses</h1>
-    <% if (typeof userid != 'undefined') { %>
-        <h1><%= userid %></h1>
-    <% } %>
+
+<div class="frame" style="padding: 0px;">
+    <div style="width: 100%; height: 120px; background-color: inherit; box-shadow: 0px 10px 10px black; padding: 2.5%">
+        <h1 class="header centertext">Currently booked classes:</h1>
+        <form class="hidden" action="/bookings/booking" name="fakeform" id="fakeform" method="POST">
+            <input type="text" name="fakeaction" id="fakeaction">
+            <input type="text" name="fakename" id="fakename" value="<%=type%>">
+            <input type="text" name="fakeroom" id="fakeroom">
+            <input type="text" name="faketime" id="faketime">
+        </form>
+    </div>
+    <div class="row column scroll schedulebox" style="padding: 7.5%">
+        <% 
+        if (userSchedule.length == 0) {
+        %>
+        <div class="row center">
+            <h1 style="text-align: center;">No booked classes <br><br>:(</h1>
+        </div>
+        <%
+        } 
+        var i = 0;
+        userSchedule.forEach(function(entry) { 
+            var date = new Date(entry.classTime);
+            var dateString = date.toString();
+            var timeString = dateString.substring(15, 21);
+            dateString = dateString.substring(3, 10);
+        %>
+            <div class="textbox cell full" style="max-height: 80px; margin-bottom: 20px; border-bottom-right-radius: 40px; border-top-right-radius: 40px;">
+                <div class="cell" style="max-width: 140px; margin-left: 10px;">
+                    <h1>
+                        <%=dateString%> <br><%=timeString%>
+                    </h1>
+                </div>
+                <div class="cell" style="max-width: 50px;"></div>
+                <div class="cell column">
+                    <h1><%=entry.instructorName%><br><%=entry.facility%></h1>
+                </div>
+                <button class="schedule-booked" id="<%=i%>" onclick="booking(this)" onmouseover="cancelStyle(this)" onmouseout="reapplyStyle(this)"><h1 style="color: inherit;">✔</h1></button>
+            </div>
+        <%
+            i++;
+        });
+        %>
+        <div style="width: 100%; height: 100px;">
+
+        </div>
+    </div>
+    <div id="popupBox" class="popupBox" style="width: 100%; height: 100%; position: absolute; display: none;">
+        <div onclick="closePopup()" style="width: 100%; height: 100%; position: absolute; opacity: 50%; background-color: black;">
+
+        </div>
+        <div style="padding: 5%; box-shadow: 0px 10px 10px black; background-color: #24195D; border-radius: 40px; width: 500px; height: 600px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="row column">
+                <h1 class="centertext" id="popupTitle">Cancel this booking?</h1>
+                <h1 id="classPopup" style="font-size: x-large; margin-left: 20px; margin-top: 30px;"></h1>
+                
+                <div class="row column">
+                    <div class="cell whitespace" style="height: 50px;"></div>
+                    <div class="cell">
+                        <div class="cell"></div>
+                        <div class="cell center"><button class="popupCancel" onclick="closePopup()"><h1 style="color: inherit;">X</h1></button></div>
+                        
+                        <div class="cell"></div>
+                        
+                        <div class="cell center"><button class="popupConfirm" onclick="submitBooking()"><h1 style="color: inherit;">✔</h1></button></div>
+                        <div class="cell"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% 
+    if (typeof success != 'undefined') {
+        var date = new Date(time);
+        var dateString = date.toString();
+        var timeString = dateString.substring(15, 21);
+        dateString = dateString.substring(3, 10);
+    %>
+        <div class="popupBox" id="popupBox2" style="display: flex;">
+            <div class="popupBackground"></div>
+            <div class="popupFrame" style="height: 400px;">
+                <div class="row column">
+                    <h1 class="centertext">The <%=action%>ing was successful!</h1>
+                    <h1 id="classPopup2" style="font-size: x-large; margin-left: 20px; margin-top: 30px;">
+                        Class: <%=type%> <br><br>
+                        Time: <%=dateString%> <%=timeString%>
+                    </h1>
+                    
+                    <div class="row column">
+                        <div class="cell whitespace" style="height: 50px;"></div>
+                        <div class="cell">
+                            <div class="cell"></div>
+                            <div class="cell center"><button class="popupConfirm" onclick="closePopup2()"><h1 style="color: inherit;">Confirm</h1></button></div>
+                            
+                            <div class="cell"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <%
+    }
+    %>
 </div>
+<script>
+    var className = <%- JSON.stringify(type) %>;
+    var scheduleList = <%- JSON.stringify(userSchedule) %>;
+    async function cancelStyle(elem) {
+        elem.firstElementChild.innerHTML = 'X'
+    }
+    async function reapplyStyle(elem) {
+        elem.firstElementChild.innerHTML = '✔'
+    }
+    async function booking(elem) {
+        var entry = scheduleList[elem.id];
+        var room = entry.classRoom;
+        var time = entry.classTime;
+        var theclassName = entry.className;
+        document.getElementById('fakeroom').value = room;
+        document.getElementById('faketime').value = time;
+        document.getElementById('fakename').value = theclassName;
+        if (elem.className == "schedule") {
+            document.getElementById('fakeaction').value = "book";
+            document.getElementById('popupTitle').innerHTML = "Book this class?"
+        } else {
+            document.getElementById('fakeaction').value = "cancel";
+            document.getElementById('popupTitle').innerHTML = "Cancel this class?"
+        }
+
+        document.getElementById('popupBox').style.display = "flex";
+
+        var date = new Date(entry.classTime);
+        var dateString = date.toString();
+        var timeString = dateString.substring(15, 21);
+        dateString = dateString.substring(3, 10);
+
+        document.getElementById('classPopup').innerHTML = 
+        "Class: <br>" + theclassName + 
+        "<br><br>Instructor: <br>" + entry.instructorName +
+        "<br><br>Time: <br>" + dateString + timeString + 
+        "<br><br>Location: <br>" + entry.facility;
+
+    }
+    async function closePopup() {
+        document.getElementById('popupBox').style.display = "none";
+    }
+    async function closePopup2() {
+        document.getElementById('popupBox2').style.display = "none";
+    }
+    async function submitBooking() {
+        document.getElementById('fakeform').submit();
+    }
+</script>

@@ -1,0 +1,118 @@
+<div class="frame">
+    <div class="row">
+        <div class="row topcenter padding" style="max-width: 30%;">
+            <button class="standard" onclick="openPopup('add', null)">Add <%=type%> class +</button>
+        </div>
+        <div class="row" style="width: 70%;">
+            <table border="1">
+                <tr>
+                    <th>Classroom</th>
+                    <th>Classtime</th>
+                    <th>Duration</th>
+                    <th>Instructor SSN</th>
+                    <th>Instructor Name</th>
+                    <th>Edit/Delete</th>
+                </tr>
+                <%
+                var i = 0;
+                schedule.forEach(function(entry) { 
+                    //var date = new Date(entry.classTime);
+                    //var dateString = date.toString();
+                    //var timeString = dateString.substring(15, 21);
+                    //dateString = dateString.substring(3, 10);
+    %>
+                <tr>
+                    <th id="room_<%=i%>"><%=entry.classRoom%></th>
+                    <th id="time_<%=i%>"><%=entry.classTime%></th>
+                    <th id="dura_<%=i%>"><%=entry.durationMin%></th>
+                    <th id="ssn_<%=i%>"><%=entry.instructorSSN%></th>
+                    <th id="instname_<%=i%>"><%=entry.instructorName%></th>
+                    <th id="edit_<%=i%>">
+                        <button id="<%=i%>" onclick="">E</button>
+                        <button id="<%=i%>" onclick="submitAction('delete', this.id)">D</button>
+                    </th>
+                </tr>
+
+
+                <%
+                    i++;
+                });
+                %>
+            </table>
+        </div>
+    </div>
+    <div id="popup" class="popup hidden">
+        <div class="row column center">
+            <h1 id="popupHeader">Content</h1>
+            <div class="">
+                <form class="instructor" name="fform" id="fform" action="/admin/schedule/book" method="POST">
+                    <input class="hidden" type="text" name="className" id="className" value="<%=type%>"> <!--probably unnecessary but i dont have time-->
+                    <label for="fakeclassName">Class:</label>
+                    <input type="text" name="fakeclassName" id="fakeclassName" value="<%=type%>" disabled>
+                    <label for="date">Time:</label>
+                    <input type="date" name="date" id="date" required>
+                    <input type="time" name="time" id="time" required>
+                    <label for="instructors">Instructor:</label>
+                    <select name="instructors" id="instructors" required>
+                        <%
+                        instructors.forEach(function(entry) {
+                        %>
+                        <option value="<%=entry.socialSecurityNumber%>"><%=entry.instructorName%></option>
+                        <%
+                        });
+                        %>
+                    </select>
+                    <label for="rooms">Room:</label>
+                    <select name="rooms" id="rooms" required>
+                        <%
+                        rooms.forEach(function(entry) {
+                        %>
+                        <option value="<%=entry.roomName%>"><%=entry.roomName%>, <%=entry.facility%></option>
+                        <%
+                        });
+                        %>
+                    </select>
+                </form>
+            </div>
+            <button class="standard" form="fform" onclick="">Submit</button>
+        </div>
+        <button class="closePopup" onclick="closePopup()">X</button>
+    </div>
+    <form class="hidden" name="fakeform" id="fakeform" action="/admin/schedule/delete" method="POST">
+        <input type="text" name="fclassRoom" id="fclassRoom">
+        <input type="text" name="fclassTime" id="fclassTime">
+        <input type="text" name="className" id="className" value="<%=type%>">
+    </form>
+</div>
+<script>
+    async function closePopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    }
+    async function openPopup(action, idno) {
+        var popup = document.getElementById('popup');
+
+        var ph = document.getElementById('popupHeader');
+
+        ph.innerHTML = action + ' class'
+
+
+        if (action != 'delete') {
+            popup.style.display = 'flex';
+        }
+        if (action == 'edit' || action == 'delete') {
+
+        } else if (action == 'add') {
+
+        }
+    }
+    async function submitAction(action, idno) {
+        var classRoom = document.getElementById('room_' + idno);
+        var classTime = document.getElementById('time_' + idno);
+
+        document.getElementById('fclassRoom').value = classRoom.innerHTML;
+        document.getElementById('fclassTime').value = classTime.innerHTML;
+
+        document.getElementById('fakeform').submit();
+    }
+</script>

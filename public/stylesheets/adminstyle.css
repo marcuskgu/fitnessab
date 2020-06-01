@@ -1,0 +1,203 @@
+/* Standard element definitions */
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    background-color: #333366;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+  }
+div {
+    box-sizing: border-box;
+}
+table {
+    color: black;
+}
+h1 {
+    color: #24195D;
+}
+
+/* Custom classes */
+
+h1.titleheader {
+    color: white;
+    font-weight: normal;
+    font-size: 100px;
+    margin: 0px;
+}
+div.frame {
+    margin-top: 2%;
+    width: 100%;
+    height: 100%;
+    padding: 1.5%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    background-color: white;
+  }
+  div.row.header {
+    max-height: 70px;
+  }
+  div.row.header2 {
+    max-height: 50px;
+  }
+  div.row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0px;
+  }
+  div.row.column {
+    flex-direction: column;
+  }
+  div.cell {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+  }
+div.header {
+    height: 100px;
+}
+div.popup {
+    width: 800px;
+    height: 800px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 10px 10px 10px black;
+}
+
+form.instructor {
+    width: 600px;
+    height: 600px;
+}
+form.instructor > input {
+    width: 100%;
+    height: 10%;
+    font-size: larger;
+    margin-bottom: 20px;
+    text-indent: 10px;
+}
+form.instructor > select {
+    width: 100%;
+    height: 10%;
+    font-size: larger;
+    margin-bottom: 20px;
+    text-indent: 10px;
+}
+form.instructor > label {
+    color: #24195D;
+    font-size: larger;
+}
+
+select.standard {
+    width: 100%;
+    height: 40px;
+    font-size: larger;
+    margin-bottom: 20px;
+    text-indent: 10px;
+}
+
+/* Buttons */
+
+button.header {
+    height: 100%;
+    width: 160px;
+    color: white;
+    font-size: larger;
+    background-color: #24195D;
+    border-color: #24195D;
+    border-style: solid;
+
+}
+
+button.header:hover {
+    background-color: #333366;
+}
+
+button.header.active {
+    background-color: #333366;
+}
+
+button.header.active:hover {
+    background-color: #24195D;
+}
+
+button.standard {
+    background-color: white;
+    border-color: #24195D;
+    color: #24195D;
+    font-size: larger;
+    height: 80px;
+    width: 200px;
+}
+
+button.closePopup {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+
+    color: #24195D;
+    background-color: white;
+    border-color: #24195D;
+    border-style: solid;
+    width: 50px;
+    height: 50px;
+}
+
+/* Generic help classes */
+.darkbackground {
+    background-color: #24195D;
+}
+
+.whitespace {
+    /* empty element used for padding, layout etc */
+  }
+  .defaultbackground {
+   background-color: #333366;
+  }
+  .alignright {
+    justify-content: right;
+  }
+  .alignbottom {
+    align-items: center;
+  }
+  .third {
+  min-width: 33%;
+  }
+  .full {
+  width: 100%;
+  }
+  .spacing {
+  width: 95%;
+  height: 95%;
+  }
+  .center {
+  justify-content: center;
+  align-items: center;
+  }
+  .topcenter {
+      justify-content: center;
+  }
+  .centertext {
+    text-align: center;
+  }
+  .hidden {
+    display: none;
+  }
+  .scroll {
+    overflow: auto;
+  }
+  .largetext {
+    font-size: larger;
+  }
+  .padding {
+      padding: 20px;
+  }

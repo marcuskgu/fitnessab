@@ -2,6 +2,8 @@ const sqlite3 = require('sqlite3').verbose();
 
 var sql = new sqlite3.Database('./database/fitnessab.db');
 
+sql.get("PRAGMA foreign_keys = ON")
+
 //module.exports = db;
 var status = true;
 module.exports.registerUser = function (req, res, next) {
@@ -34,14 +36,20 @@ module.exports.registerUser = function (req, res, next) {
 module.exports.login = function (req, res, next) {
   var socialSecurityNumber = req.body.socialSecurityNumber;
 
-  sql.get('SELECT * FROM Member WHERE socialSecurityNumber = ?', [socialSecurityNumber], function(err, row) {
+  sql.get('SELECT EXISTS (SELECT * FROM Member WHERE socialSecurityNumber = ?) AS userfound', [socialSecurityNumber], function(err, row) {
     if (err) {
       console.log(socialSecurityNumber + ' does not exist')
       next(err);
-    } else {
-      res.locals.userdata = row;
-      console.log('user exists:\n' + row);
+    } else if (row.userfound > 0) {
+      //res.locals.userdata = row;
+      console.log('user exists:\n' + socialSecurityNumber);
       next();
+    } else {
+      err = "User does not exist";
+      console.log(row);
+      console.log(typeof row);
+      console.log(row.userfound);
+      next(err);
     }
   });
 }
@@ -139,7 +147,7 @@ module.exports.classes = function (req, res, next) {
 }
 
 module.exports.subclasses = function (req, res, next) {
-  sql.all(`SELECT name, type FROM Classes`, [], function(err, rows) {
+  sql.all(`SELECT * FROM Classes`, [], function(err, rows) {
     if (err) {
       console.log(err);
       next();
@@ -152,7 +160,7 @@ module.exports.subclasses = function (req, res, next) {
 
 module.exports.schedule = function (req, res, next) {
   var query = 
-  `select classTime, durationMin, instructorName, facility, classRoom 
+  `select classTime, durationMin, instructorName, facility, classRoom, className 
   from (
     select * from (
       select * from Schedule as S 
@@ -166,7 +174,7 @@ module.exports.schedule = function (req, res, next) {
   where className = ?
   and (classTime between DATETIME('now') and DATETIME('now', '+31 days'))`;
 
-  var className = req.body.fakename;
+  var className = req.body.fakename; //from classes.ejs
   sql.all(query, [className], function(err, rows) {
     if (err) {
       console.log(err);
@@ -216,12 +224,276 @@ module.exports.makeBooking = function (req, res, next) {
     where memberSSN = ?
     and classTime = ?
     and classRoom = ?`;
-  } else {
+  } else if (req.body.fakeaction == "book") {
     var query = `
     insert into MemberBooking
     values(?, ?, ?)`;
+  } else {
+    err = "Invalid action, must be 'book' or 'cancel'";
+    console.log(err);
+    next(err);
   }
   sql.run(query, [memberSSN, classTime, classRoom], function (err) {
+    if (err) {
+      console.log(err);
+      if (err.errno == 19) {
+        console.log('Time: ' + classTime + '\nRoom: ' + classRoom)
+        next('route')
+      } else {
+        next(err);
+      }
+    } else {
+      next();
+    }
+  });
+}
+
+module.exports.doubleBooked = function (req, res, next) {
+  console.log('Checking for double booked class...')
+
+  var classTime = req.body.faketime;
+  var memberSSN = req.app.locals.userid;
+
+  console.log(classTime + ' ' + memberSSN)
+
+  var query = `
+  select className, classTime, facility from Schedule
+  inner join (
+    select * from MemberBooking
+    inner join Room
+    on classRoom = roomName)
+  using(classTime, classRoom)
+  where memberSSN = ?
+  and classTime = ?`;
+
+  sql.get(query, [memberSSN, classTime], function (err, row) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      console.log(row);
+      res.locals.bookedClass = row;
+      next();
+    }
+  });
+}
+
+module.exports.checkUserSchedule = function (req, res, next) {
+  var query = `
+  select className, classTime, instructorName, facility, classRoom from (
+    select * from Schedule
+    inner join (
+      select * from MemberBooking
+      inner join (
+        select * from InstructorBooking
+        inner join Instructor
+        on instructorSSN = socialSecurityNumber)
+      using(classTime, classRoom))
+    using(classTime, classRoom))
+  inner join Room
+  on classRoom = roomName
+  where memberSSN = ?
+  and (classTime between DATETIME('now') and DATETIME('now', '+31 days'))`;
+  var memberSSN = req.app.locals.userid;
+
+  sql.all(query, [memberSSN], function (err, rows) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      res.locals.userSchedule = rows;
+      console.log('User booked number of classes: ' + rows.length)
+      next();
+    }
+  });
+}
+
+module.exports.getInstructors = function (req, res, next) {
+  var query = `
+  select * from Instructor order by instructorName`;
+
+  sql.all(query, [], function (err, rows) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      res.locals.instructors = rows;
+      next();
+    }
+  });
+}
+
+module.exports.addInstructor = function (req, res, next) {
+  var query = `
+  insert into Instructor values(?, ?, ?, ?)`;
+  var instructorName = req.body.instructorName;
+  var email = req.body.email;
+  var phoneNumber = req.body.phoneNumber;
+  var socialSecurityNumber = req.body.socialSecurityNumber;
+
+  sql.run(query, [instructorName, email, phoneNumber, socialSecurityNumber], function (err) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      next();
+    }
+  });
+}
+
+module.exports.editInstructor = function (req, res, next) {
+  var query = `
+  update Instructor
+  set instructorName = ?,
+  email = ?,
+  phoneNumber = ?
+  where socialSecurityNumber = ?`;
+  var instructorName = req.body.instructorName;
+  var email = req.body.email;
+  var phoneNumber = req.body.phoneNumber;
+  var socialSecurityNumber = req.body.socialSecurityNumber;
+
+  sql.run(query, [instructorName, email, phoneNumber, socialSecurityNumber], function (err) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      next();
+    }
+  });
+}
+
+module.exports.adminSchedule = function (req, res, next) {
+  var query = `
+  select * from Schedule
+  inner join (
+	  select classTime, classRoom, instructorName, instructorSSN 
+	  from InstructorBooking 
+	  inner join Instructor 
+	  on instructorSSN = socialSecurityNumber)
+  using (classTime, classRoom)
+  where className = ?`;
+
+  var className = req.body.className;
+
+  sql.all(query, [className], function (err, rows) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      res.locals.schedule = rows;
+      next();
+    }
+  });
+}
+
+module.exports.getRooms = function (req, res, next) {
+  var query = `
+  select * from Room
+  order by facility, roomName`;
+
+  sql.all(query, [], function (err, rows) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      res.locals.rooms = rows;
+      next();
+    }
+  });
+}
+
+module.exports.createScheduleEntry = function (req, res, next) {
+  var query = `
+  insert into Schedule
+  values(?, ?, ?, 60)`;
+
+  var classRoom = req.body.rooms;
+  var className = req.body.className;
+  var classTime = req.body.date + ' ' + req.body.time;
+  
+  sql.run(query, [classRoom, className, classTime], function(err) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      next();
+    }
+  });
+}
+
+module.exports.createInstructorBooking = function (req, res, next) {
+  var query = `
+  insert into InstructorBooking
+  values(?, ?, ?)`;
+
+  var classTime = req.body.date + ' ' + req.body.time;
+  var instructorSSN = req.body.instructors;
+  var classRoom = req.body.rooms;
+
+  sql.run(query, [classTime, instructorSSN, classRoom], function(err) {
+    if (err) {
+      console.log(err);
+      next(err);
+    } else {
+      next();
+    }
+  });
+}
+
+module.exports.deleteScheduleEntry = function (req, res, next) {
+  var classTime = req.body.fclassTime;
+  var classRoom = req.body.fclassRoom;
+
+  var query = `
+  delete from MemberBooking
+  where classTime = ?
+  and classRoom = ?`;
+
+  sql.run(query, [classTime, classRoom], function(err) {
+    if (err) {
+      console.log('failed to delete from MemberBooking:');
+      console.log(err);
+    }
+  });
+
+  query = `
+  delete from InstructorBooking
+  where classTime = ?
+  and classRoom = ?`;
+
+  sql.run(query, [classTime, classRoom], function(err) {
+    if (err) {
+      console.log('failed to delete from InstructorBooking:');
+      console.log(err);
+    }
+  });
+
+  query = `
+  delete from Schedule
+  where classTime = ?
+  and classRoom = ?`;
+
+  sql.run(query, [classTime,classRoom], function(err) {
+    if (err) {
+      console.log('failed to delete from Schedule:');
+      console.log(err);
+      next(err);
+    } else {
+      next();
+    }
+  });
+}
+
+module.exports.addClass = function (req, res, next) {
+  var query = `
+  insert into Classes
+  values(?, ?, 50)`;
+
+  var type = req.body.type;
+  var name = req.body.name;
+
+  sql.run(query, [type, name], function(err) {
     if (err) {
       console.log(err);
       next(err);
