@@ -33,11 +33,11 @@ INSERT INTO Leave VALUES ("Stora Gymmet", '2020-04-24 10:42:32', 9001021234);
 INSERT INTO Leave VALUES ("Lilla Gymmet", '2020-05-18 09:23:14', 9505050101);
 INSERT INTO Leave VALUES ("Stora Gymmet", '2020-05-16 19:01:43', 9001021234);
 
-INSERT INTO Room VALUES (104, "Multi-purpose", "Douglas", "70", "Stora Gymmet");
-INSERT INTO Room VALUES (40, "Multi-purpose", "Marcus", "20", "Lilla Gymmet");
-INSERT INTO Room VALUES (70, "Spinning", "Astrid", "40", "Stora Gymmet");
-INSERT INTO Room VALUES (96, "Multi-purpose", "Max", "62", "Lilla Gymmet");
-INSERT INTO Room VALUES (52, "Crossfit", "Fina", "24", "Stora Gymmet");
+INSERT INTO Room VALUES (104, "Multi-purpose", "Oasen", "70", "Stora Gymmet");
+INSERT INTO Room VALUES (40, "Multi-purpose", "Rymden", "20", "Lilla Gymmet");
+INSERT INTO Room VALUES (70, "Spinning", "Kraften", "40", "Stora Gymmet");
+INSERT INTO Room VALUES (96, "Multi-purpose", "Styrkan", "62", "Lilla Gymmet");
+INSERT INTO Room VALUES (52, "Crossfit", "Effekten", "24", "Stora Gymmet");
 
 INSERT INTO Equipment VALUES ("Yoga mat");
 INSERT INTO Equipment VALUES ("Bike");
@@ -97,33 +97,33 @@ INSERT INTO Instructor VALUES ("Lisa Beck", "Lill_lisan@gmail.com", 0708777777, 
 INSERT INTO Instructor VALUES ("Alfons Åberg", "alfons@yahoo.se", 070060606, 8403038877);
 INSERT INTO Instructor Values ("Clas Ohlin", "clas.ohlin@hotmail.hotmail.com", 0707030405, 7206209999);
 
-INSERT INTO Schedule VALUES ("Astrid", "Intense Cycle", '2020-05-16 17:30:00', 55);
-INSERT INTO Schedule VALUES ("Douglas", "Power Yoga", '2020-04-04 18:00:00', 55);
-INSERT INTO Schedule VALUES ("Douglas", "Yoga", '2020-04-04 13:15:00', 55);
-INSERT INTO Schedule VALUES ("Douglas", "Yoga", '2020-05-16 13:15:00', 55);
-INSERT INTO Schedule VALUES ("Max", "Body Pump", '2020-04-16 12:30:00', 45);
-INSERT INTO Schedule VALUES ("Max", "Body Pump", '2020-05-19 18:00:00', 45);
-INSERT INTO Schedule VALUES ("Fina", "Crossfit Basics", '2020-05-14 13:00:00', 30);
-INSERT INTO Schedule VALUES ("Fina", "Crossfit Intense", '2020-04-24 09:00:00', 30);
-INSERT INTO Schedule VALUES ("Astrid", "Soul Cycling", '2020-05-17 18:00:00', 45);
-INSERT INTO Schedule VALUES ("Max", "Yoga - Basic", '2020-05-18 08:00:00', 55);
-INSERT INTO Schedule VALUES ("Max", "HIIT It", '2020-05-20 08:15:00', 30);
+INSERT INTO Schedule VALUES ("Kraften", "Intense Cycle", '2020-05-16 17:30:00', 55);
+INSERT INTO Schedule VALUES ("Oasen", "Power Yoga", '2020-04-04 18:00:00', 55);
+INSERT INTO Schedule VALUES ("Oasen", "Yoga", '2020-04-04 13:15:00', 55);
+INSERT INTO Schedule VALUES ("Oasen", "Yoga", '2020-05-16 13:15:00', 55);
+INSERT INTO Schedule VALUES ("Styrkan", "Body Pump", '2020-04-16 12:30:00', 45);
+INSERT INTO Schedule VALUES ("Styrkan", "Body Pump", '2020-05-19 18:00:00', 45);
+INSERT INTO Schedule VALUES ("Effekten", "Crossfit Basics", '2020-05-14 13:00:00', 30);
+INSERT INTO Schedule VALUES ("Effekten", "Crossfit Intense", '2020-04-24 09:00:00', 30);
+INSERT INTO Schedule VALUES ("Kraften", "Soul Cycling", '2020-05-17 18:00:00', 45);
+INSERT INTO Schedule VALUES ("Styrkan", "Yoga - Basic", '2020-05-18 08:00:00', 55);
+INSERT INTO Schedule VALUES ("Styrkan", "HIIT It", '2020-05-20 08:15:00', 30);
 
 
-INSERT INTO InstructorBooking VALUES ('2020-05-16 17:30:00', 7903318989, "Astrid");
-INSERT INTO InstructorBooking VALUES ('2020-04-04 18:00:00', 9007258675, "Douglas");
-INSERT INTO InstructorBooking VALUES ('2020-04-04 13:15:00', 9007258675, "Douglas");
-INSERT INTO InstructorBooking VALUES ('2020-05-16 13:15:00', 9007258675, "Douglas");
-INSERT INTO InstructorBooking VALUES ('2020-04-16 12:30:00', 9007258675, "Max");
-INSERT INTO InstructorBooking VALUES ('2020-05-19 18:00:00', 9007258675, "Max");
-INSERT INTO InstructorBooking VALUES ('2020-05-14 13:00:00', 8403038877, "Fina");
-INSERT INTO InstructorBooking VALUES ('2020-04-24 09:00:00', 8403038877, "Fina");
-INSERT INTO InstructorBooking VALUES ('2020-05-17 18:00:00', 9401034545, "Astrid");
-INSERT INTO InstructorBooking VALUES ('2020-05-18 08:00:00', 9007258675, "Max");
-INSERT INTO InstructorBooking VALUES ('2020-05-20 08:15:00', 8403038877, "Max");
+INSERT INTO InstructorBooking VALUES ('2020-05-16 17:30:00', 7903318989, "Kraften");
+INSERT INTO InstructorBooking VALUES ('2020-04-04 18:00:00', 9007258675, "Oasen");
+INSERT INTO InstructorBooking VALUES ('2020-04-04 13:15:00', 9007258675, "Oasen");
+INSERT INTO InstructorBooking VALUES ('2020-05-16 13:15:00', 9007258675, "Oasen");
+INSERT INTO InstructorBooking VALUES ('2020-04-16 12:30:00', 7206209999, "Styrkan");
+INSERT INTO InstructorBooking VALUES ('2020-05-19 18:00:00', 7206209999, "Styrkan");
+INSERT INTO InstructorBooking VALUES ('2020-05-14 13:00:00', 8403038877, "Effekten");
+INSERT INTO InstructorBooking VALUES ('2020-04-24 09:00:00', 8403038877, "Effekten");
+INSERT INTO InstructorBooking VALUES ('2020-05-17 18:00:00', 9401034545, "Kraften");
+INSERT INTO InstructorBooking VALUES ('2020-05-18 08:00:00', 9007258675, "Styrkan");
+INSERT INTO InstructorBooking VALUES ('2020-05-20 08:15:00', 8403038877, "Styrkan");
 
 
-INSERT INTO MemberBooking VALUES (9505050101, '2020-05-14 13:00:00', "Fina");
-INSERT INTO MemberBooking VALUES (9001021234, '2020-04-24 09:00:00', "Fina");
-INSERT INTO MemberBooking VALUES (9505050101, '2020-05-18 08:00:00', "Max");
-INSERT INTO MemberBooking VALUES (9001021234, '2020-05-16 17:30:00', "Astrid");
+INSERT INTO MemberBooking VALUES (9505050101, '2020-05-14 13:00:00', "Effekten");
+INSERT INTO MemberBooking VALUES (9001021234, '2020-04-24 09:00:00', "Effekten");
+INSERT INTO MemberBooking VALUES (9505050101, '2020-05-18 08:00:00', "Styrkan");
+INSERT INTO MemberBooking VALUES (9001021234, '2020-05-16 17:30:00', "Kraften");
